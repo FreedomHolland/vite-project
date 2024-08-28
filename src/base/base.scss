@@ -1,0 +1,16 @@
+@use "reset";
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  font-family: 16px;
+  letter-spacing: 0.5px;
+
+  * {
+    line-height: 120%;
+  }
+}
