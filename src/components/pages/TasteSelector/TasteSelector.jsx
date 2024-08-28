@@ -1,24 +1,20 @@
 import { useState } from "react";
-import FirstRequest from "../../../functions/FirstRequest";
+import machineProcess from "../../../functions/machineProcess";
 import "./styles.scss";
 
 export default function TasteSelector() {
-  const [information, setInformation] = useState("");
 
   function firstButton() {
-    setInformation("strawberry");
+    machineProcess("strawberry");
   }
 
   function secondButton() {
-    setInformation("lemon");
+    machineProcess("lemon");
   }
 
   function thirdButton() {
-    setInformation("apple");
-    FirstRequest("apple");
+    machineProcess("apple");
   }
-
-  console.log(information);
 
   return (
     <div className="taste-selector-container">

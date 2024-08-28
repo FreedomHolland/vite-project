@@ -11,12 +11,12 @@ export default function BootStandBy() {
   /* 
    you will make de request you want and you will stop de loading by turning it to false, and then you can do the route change like
 
-  const firstRequest = () =>
+  const machineProcess = () =>
     // after the success of the request you turn the loading off
     setLoading(false);
 
   useEffect(() => {
-    firstRequest();
+    machineProcess();
   }, []);
 
   useEffect(() => {
