@@ -1,41 +1,40 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import firstImage from "./../../../assets/img/images-1.png";
-import "./styles.scss";
+import { log as logUtility } from '@utils/logUtility'; // Import the log function with a different name
 
 export default function BootStandBy() {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(true);
-  console.log(loading);
-
-  /* 
-   you will make de request you want and you will stop de loading by turning it to false, and then you can do the route change like
-
-  const machineProcess = () =>
-    // after the success of the request you turn the loading off
-    setLoading(false);
+  const [logMessage, setLogMessage] = useState(''); // Renamed state variable
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    machineProcess();
-  }, []);
+    const fetchLog = async () => {
+      try {
+        const response = await fetch('http://localhost:3003/api/logs');
+        if (!response.ok) throw new Error('Failed to fetch GPIO log');
+        const data = await response.json();
+        setLogMessage(data.log); // Update state with the latest log 
+        logUtility(`Latest GPIO Log: ${data.log}`); // Log to console
 
-  useEffect(() => {
-    if (!loading) navigate("/taste-selector");
-  }, [loading]);
-  };
+        // Navigate based on the log content
+        if (data.log.includes("CAN") || data.log.includes("CUP")) {
+          navigate("/taste-selector");
+        }
+      } catch (error) {
+        setError('Error fetching GPIO log.');
+        logUtility(`Error fetching GPIO log: ${error.message}`);
+      }
+    };
 
-  */
+    fetchLog(); // Initial fetch
+    const logInterval = setInterval(fetchLog, 500); // Fetch every 50ms
 
-  useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-      navigate("/taste-selector");
-    }, 5000);
-  }, []);
+    return () => clearInterval(logInterval); // Clean up interval on unmount
+  }, [navigate]);
 
   return (
     <div className="boot-standby-container">
-      <img src={firstImage} />
+      {/* Your screen content */}
     </div>
   );
 }

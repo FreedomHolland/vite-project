@@ -1,0 +1,1 @@
+export { SlimpieWordGemaakt } from "./SlimpieWordGemaakt";
