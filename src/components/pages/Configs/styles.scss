@@ -1,0 +1,53 @@
+.configs-container {
+  display: flex;
+  margin-top: 50px;
+  justify-content: center;
+
+  .right-side {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+    .main {
+      width: 100px;
+      display: flex;
+      margin-bottom: 8px;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      border: 6px solid red;
+    }
+  }
+
+  .text {
+    text-align: center;
+    font-size: 24px;
+    font-weight: 800;
+  }
+
+  .total {
+    font-weight: 800;
+  }
+
+  .tastes {
+    padding: 16px;
+    display: flex;
+    gap: 24px;
+    border: 1px solid black;
+
+    .taste {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+
+      > .text {
+        width: 50%;
+      }
+
+      > .total {
+        width: 50%;
+      }
+    }
+  }
+}

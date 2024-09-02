@@ -3,6 +3,7 @@ import { Gpio } from 'pigpio';
 // GPIO Pin Setup
 const Can_Sensor = new Gpio(18, { mode: Gpio.INPUT }); // GPIO 18 (physical pin 12)
 const Cup_Sensor = new Gpio(17, { mode: Gpio.INPUT }); // GPIO 17 (physical pin 11)
+const Temp_Sensor = new Gpio(4, { mode: Gpio.INPUT }); // Replace with your GPIO pin
 
 let previousCanSensorValue = Can_Sensor.digitalRead();
 let previousCupSensorValue = Cup_Sensor.digitalRead();
@@ -20,11 +21,11 @@ function checkForCanOrCup(callback) {
 
         if (CanSensorValue !== previousCanSensorValue || CupSensorValue !== previousCupSensorValue) {
             if (CanSensorValue === 1 && CupSensorValue === 1) {
-                log('CAN is placed');
+                log('[GPIO] CAN is placed ');
             } else if (CanSensorValue === 1) {
-                log('CUP is placed');
+                log('[GPIO] CUP is placed');
             } else {
-                log('Nothing is placed');
+                log('[GPIO] Nothing is placed');
             }
 
             previousCanSensorValue = CanSensorValue;
@@ -35,4 +36,12 @@ function checkForCanOrCup(callback) {
     setInterval(checkSensors, 500); // Check every 500ms
 }
 
-export { checkForCanOrCup };
+// Mock function to read temperature - replace with actual logic if using a real sensor
+function readTemperature() {
+    
+    const temperature = 25.3; 
+    console.log(`[GPIO] Temperature read: ${temperature}°C`);
+    return temperature;
+}
+
+export { checkForCanOrCup, readTemperature };

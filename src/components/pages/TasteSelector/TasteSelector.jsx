@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { log as logUtility } from '@utils/logUtility'; // Import the log function with a different name
-
 import './styles.scss';
 
 export default function TasteSelector() {
@@ -19,7 +18,7 @@ export default function TasteSelector() {
     }
   };
 
-  const triggerMachineProcess = async (flavor) => {
+  const triggerdespensorCycle = async (flavor) => {
     if (!hasCupOrCan) {
       setError('No cup or can detected. Please place a cup or can.');
       return;
@@ -58,6 +57,12 @@ export default function TasteSelector() {
         if (data.log.includes("Nothing is placed")) {
           navigate("/");
         }
+
+        // here I have to use the var in taste_2
+        if (data.log.includes("despensorCycle Taste_2")) {
+          navigate("/");
+        }
+
       } catch (error) {
         setError('Error fetching GPIO log.');
         logUtility(`Error fetching GPIO log: ${error.message}`);
@@ -75,9 +80,9 @@ export default function TasteSelector() {
       {error && <p className="error">{error}</p>}
       <div className="status">{logMessage}</div>
       <div className="buttons">
-        <button onClick={() => triggerMachineProcess('Taste_1')} className="strawberry"></button>
-        <button onClick={() => triggerMachineProcess('Taste_2')} className="lemon"></button>
-        <button onClick={() => triggerMachineProcess('Taste_3')} className="apple"></button>
+        <button onClick={() => triggerdespensorCycle('Taste_1')} className="strawberry"></button>
+        <button onClick={() => triggerdespensorCycle('Taste_2')} className="lemon"></button>
+        <button onClick={() => triggerdespensorCycle('Taste_3')} className="apple"></button>
       </div>
     </div>
   );

@@ -5,11 +5,10 @@ const TASTE1_PUMP_PIN = 37;           // Pin for Taste 1 Pump (GPIO 27)
 const TASTE2_PUMP_PIN = 35;           // Pin for Taste 2 Pump (GPIO 22)
 const TASTE3_PUMP_PIN = 33;           // Pin for Taste 3 Pump (GPIO 23)
 
-
 const CUP_SENSOR_PIN = 11;            // Pin for Cup Sensor (GPIO 17)
 const CAN_SENSOR_PIN = 12;            // Pin for Can Sensor (GPIO 18)
 
-const SOLENOID_VALVE_PIN = 7;         // Pin for Solenoid Valve (GPIO 4)
+const SOLENOID_VALVE_PIN = 31;         // Pin for Solenoid Valve (GPIO 4)
 
 const FLOW_SENSOR_PIN = 18;           // Pin for Flow Sensor (GPIO 24)
 const FLOW_PULSE_VOLUME = 100;        // Volume per flow pulse in milliliters
@@ -54,8 +53,8 @@ function checkForCanOrCup() {
   return true; // Can or cup is present
 }
 
-export function machineProcess(tasteInput) {
-  console.log("machineProcess " + tasteInput);
+export function despensorCycle(tasteInput) {
+  console.log("despensorCycle " + tasteInput);
 
   // Reset flow pulse count and dispensed volume
   flowPulseCount = 0;
@@ -76,11 +75,9 @@ export function machineProcess(tasteInput) {
       dispensedVolume = flowPulseCount * FLOW_PULSE_VOLUME;
       console.log(`Flow pulse detected. Total pulses: ${flowPulseCount}`);
       console.log(`Dispensing... Current volume: ${dispensedVolume}ml`);
-
       // Reset the flow timeout whenever a pulse is detected
       clearTimeout(flowTimeout);
       startFlowTimeout();
-
       // Check if the target volume has been dispensed
       if (dispensedVolume >= TARGET_VOLUME) {
         console.log("Target volume dispensed. Stopping the pumps and solenoid valve.");

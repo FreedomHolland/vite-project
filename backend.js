@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import { machineProcess } from './src/functions/machineProcess.js';
+import { despensorCycle } from './src/functions/despensorCycle.js';
 import { checkForCanOrCup } from './src/functions/gpio_module.js';
 
 const app = express();
@@ -9,10 +9,9 @@ const port = 3003;
 app.use(express.json());
 app.use(cors());
 
-let latestLog = '';
-
 // A list to hold SSE connections
 const clients = [];
+let latestLog = '';
 
 // Function to handle GPIO events and update the log
 const handleGpioEvents = (log) => {
@@ -43,7 +42,7 @@ app.post('/api/machine-process', (req, res) => {
     }
 
     try {
-        machineProcess(taste);
+        despensorCycle(taste);
         res.sendStatus(200);
     } catch (error) {
         console.error('Error processing machine:', error);
@@ -54,11 +53,22 @@ app.post('/api/machine-process', (req, res) => {
 // Endpoint to check for can/cup presence
 app.get('/api/check-can-or-cup', (req, res) => {
     try {
-        const hasCupOrCan = checkForCanOrCup(); // Ensure this function is correctly implemented
+        const hasCupOrCan = checkForCanOrCup();
         res.status(200).json({ hasCupOrCan });
     } catch (error) {
         console.error('Error checking can/cup presence:', error);
         res.status(500).json({ message: 'Failed to check can/cup presence', error: error.message });
+    }
+});
+
+// Endpoint to get the current temperature
+app.get('/api/temperature', (req, res) => {
+    try {
+        const temperature = readTemperature();
+        res.status(200).json({ temperature });
+    } catch (error) {
+        console.error('Error reading temperature:', error);
+        res.status(500).json({ message: 'Failed to read temperature', error: error.message });
     }
 });
 
