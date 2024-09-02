@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { log as logUtility } from "@utils/logUtility"; // Import the log function with a different name
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, IconButton } from "@mui/material";
 import "./styles.scss";
 
 export default function Feedback() {
@@ -12,6 +12,10 @@ export default function Feedback() {
     "Drink is being prepared"
   );
   const progress = 100;
+
+  const buttonClick = () => {
+    navigate("/configs");
+  };
 
   useEffect(() => {
     const fetchLog = async () => {
@@ -71,6 +75,9 @@ export default function Feedback() {
           <span className="message">{progressMessage}</span>
         </div>
       </div>
+      <IconButton className="icon" onClick={buttonClick}>
+        <span className="material-symbols-outlined">settings</span>
+      </IconButton>
     </div>
   );
 }
