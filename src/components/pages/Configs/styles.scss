@@ -1,7 +1,6 @@
 .configs-container {
-  gap: 24px;
+  gap: 8px;
   display: flex;
-  justify-content: center;
 
   .right-side,
   .left-side {
@@ -39,7 +38,7 @@
     }
 
     .tastes-box {
-      gap: 24px;
+      gap: 16px;
       padding: 16px;
       display: grid;
       border: 1px solid black;
@@ -67,7 +66,7 @@
   }
 
   .left-side {
-    gap: 14px;
+    gap: 8px;
     display: grid;
 
     .infos {
