@@ -1,0 +1,26 @@
+.taste-selector-container {
+  height: 500px;
+  display: flex;
+  margin-top: 50px;
+  justify-content: center;
+  background-position: top;
+  background-repeat: no-repeat;
+  background-image: url("/src/assets/img/taste-selector.png");
+
+  .buttons {
+    width: 800px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-evenly;
+
+    .strawberry,
+    .lemon,
+    .apple {
+      cursor: pointer;
+      height: 200px;
+      width: 200px;
+      background-color: transparent;
+    }
+  }
+}

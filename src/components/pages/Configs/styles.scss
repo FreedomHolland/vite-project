@@ -1,52 +1,116 @@
 .configs-container {
+  gap: 24px;
   display: flex;
-  margin-top: 50px;
   justify-content: center;
 
-  .right-side {
+  .right-side,
+  .left-side {
     display: flex;
+    font-weight: 800;
     align-items: center;
     flex-direction: column;
+
+    .title {
+      text-align: center;
+    }
+
+    .text {
+      font-size: 24px;
+      text-align: center;
+    }
+
+    .total {
+      width: 65%;
+      text-align: center;
+    }
 
     .main {
       width: 100px;
       display: flex;
       margin-bottom: 8px;
       align-items: center;
-      justify-content: center;
       flex-direction: column;
+      justify-content: center;
       border: 6px solid red;
+
+      &.enabled {
+        border: 6px solid green;
+      }
+    }
+
+    .tastes-box {
+      gap: 24px;
+      padding: 16px;
+      display: grid;
+      border: 1px solid black;
+
+      .enable {
+        width: 100%;
+        text-align: center;
+      }
+
+      .tastes {
+        display: flex;
+
+        .taste {
+          display: flex;
+          align-items: center;
+          flex-direction: column;
+          justify-content: center;
+
+          > .text {
+            width: 80%;
+          }
+        }
+      }
     }
   }
 
-  .text {
-    text-align: center;
-    font-size: 24px;
-    font-weight: 800;
-  }
+  .left-side {
+    gap: 14px;
+    display: grid;
 
-  .total {
-    font-weight: 800;
-  }
+    .infos {
+      display: grid;
+      font-weight: 800;
+      text-align: center;
+    }
 
-  .tastes {
-    padding: 16px;
-    display: flex;
-    gap: 24px;
-    border: 1px solid black;
-
-    .taste {
+    .first-peltier,
+    .temperature-list {
+      gap: 40px;
+      padding: 16px;
       display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
+      border: 1px solid black;
 
-      > .text {
-        width: 50%;
-      }
+      .box {
+        gap: 8px;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: center;
 
-      > .total {
-        width: 50%;
+        .degree {
+          width: 81px;
+          height: 74px;
+          display: flex;
+          align-items: center;
+          flex-direction: column;
+          justify-content: center;
+          border: 1px solid black;
+
+          &.gray {
+            background-color: lightgray;
+          }
+
+          &.green {
+            background-color: green;
+          }
+
+          &.red {
+            background-color: red;
+          }
+        }
       }
     }
   }

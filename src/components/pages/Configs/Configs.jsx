@@ -1,102 +1,137 @@
-import Switch from "@mui/material/Switch";
-import { styled } from "@mui/material/styles";
+import { useState } from "react";
+import CustomSwitch from "../../CustomSwitch/CustomSwitch";
 import "./styles.scss";
 
 export default function Configs() {
   const quantity = 100;
-
-  const IOSSwitch = styled((props) => (
-    <Switch
-      focusVisibleClassName=".Mui-focusVisible"
-      disableRipple
-      {...props}
-    />
-  ))(({ theme }) => ({
-    width: 42,
-    height: 26,
-    padding: 0,
-    "& .MuiSwitch-switchBase": {
-      padding: 0,
-      margin: 2,
-      transitionDuration: "300ms",
-      "&.Mui-checked": {
-        transform: "translateX(16px)",
-        color: "#fff",
-        "& + .MuiSwitch-track": {
-          backgroundColor: "#65C466",
-          opacity: 1,
-          border: 0,
-          ...theme.applyStyles("dark", {
-            backgroundColor: "#2ECA45",
-          }),
-        },
-        "&.Mui-disabled + .MuiSwitch-track": {
-          opacity: 0.5,
-        },
-      },
-      "&.Mui-focusVisible .MuiSwitch-thumb": {
-        color: "#33cf4d",
-        border: "6px solid #fff",
-      },
-      "&.Mui-disabled .MuiSwitch-thumb": {
-        color: theme.palette.grey[100],
-        ...theme.applyStyles("dark", {
-          color: theme.palette.grey[600],
-        }),
-      },
-      "&.Mui-disabled + .MuiSwitch-track": {
-        opacity: 0.7,
-        ...theme.applyStyles("dark", {
-          opacity: 0.3,
-        }),
-      },
-    },
-    "& .MuiSwitch-thumb": {
-      boxSizing: "border-box",
-      width: 22,
-      height: 22,
-    },
-    "& .MuiSwitch-track": {
-      borderRadius: 26 / 2,
-      backgroundColor: "#E9E9EA",
-      opacity: 1,
-      transition: theme.transitions.create(["background-color"], {
-        duration: 500,
-      }),
-      ...theme.applyStyles("dark", {
-        backgroundColor: "#39393D",
-      }),
-    },
-  }));
-
-  const mainWaterSwich = (value) => {
-    console.log(value);
-  };
+  const [mainWaterState, setMainWaterState] = useState(false);
+  const [peltierStates, setPeltierStates] = useState({
+    TASTE_1: false,
+    TASTE_2: false,
+    TASTE_3: false,
+  });
+  const [tempStates, setTempStates] = useState({
+    TEMP_1: false,
+    TEMP_2: false,
+    TEMP_3: false,
+  });
 
   const tastes = [
-    { title: "Taste 1", quantity: 100 },
-    { title: "Taste 2", quantity: 100 },
-    { title: "Taste 3", quantity: 100 },
+    { title: "Taste 1", quantity: 50, name: "TASTE_1" },
+    { title: "Taste 2", quantity: 800, name: "TASTE_2" },
+    { title: "Taste 3", quantity: 1000, name: "TASTE_3" },
   ];
+
+  const firstPeltier = [
+    { title: "Peltier #1", degrees: 50, name: "PELTIER_1", targetTemp: true },
+    { title: "Peltier #2", degrees: 800, name: "PELTIER_2", targetTemp: false },
+    { title: "Peltier #3", degrees: 1000, name: "PELTIER_3", targetTemp: true },
+  ];
+
+  const temperatureList = [
+    { title: "Temp #1", degrees: 50, name: "TEMP_1", targetTemp: false },
+    { title: "Temp #2", degrees: 800, name: "TEMP_2", targetTemp: true },
+    { title: "Temp #3", degrees: 1000, name: "TEMP_3", targetTemp: false },
+  ];
+
+  const mainWaterSwitch = (value) => {
+    setMainWaterState(value);
+  };
+
+  const tasteSwitch = (name, value) => {
+    console.log(name, value);
+  };
+
+  const firstPeltierSwitch = (name, value) => {
+    setPeltierStates((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const temperatureSwitch = (name, value) => {
+    setTempStates((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const degreeBoxClasses = (states, item) => {
+    let color = "";
+
+    if (!states[item.name]) {
+      color = "gray";
+    } else if (item.targetTemp) {
+      color = "green";
+    } else {
+      color = "red";
+    }
+
+    return `degree ${color}`;
+  };
 
   return (
     <div className="configs-container">
       <div className="right-side">
-        <div className="main">
+        <div className={`main ${mainWaterState ? "enabled" : ""}`}>
           <span className="text">Main water</span>
-          <IOSSwitch
-            onChange={(event) => mainWaterSwich(event.target.checked)}
+          <CustomSwitch
+            checked={mainWaterState}
+            onChange={(event) => mainWaterSwitch(event.target.checked)}
           />
           <span className="total">{`xxx: ${quantity} ml`}</span>
         </div>
-        <div className="tastes">
-          {tastes.map((taste) => (
-            <div className="taste">
-              <span className="text">{taste.title}</span>
-              <IOSSwitch
-                onChange={(event) => mainWaterSwich(event.target.checked)}
+        <div className="tastes-box">
+          <div className="tastes">
+            {tastes.map((taste) => (
+              <div key={taste.name} className="taste">
+                <span className="text">{taste.title}</span>
+                <CustomSwitch
+                  onChange={(event) =>
+                    tasteSwitch(taste.name, event.target.checked)
+                  }
+                />
+                <span className="total">{`xxx: ${taste.quantity} ml`}</span>
+              </div>
+            ))}
+          </div>
+          <span className="enable">Enable Taste dispensers</span>
+        </div>
+      </div>
+      <div className="left-side">
+        <span className="title">Cooler tempertures per segment</span>
+        <div className="first-peltier">
+          {firstPeltier.map((peltier) => (
+            <div key={peltier.name} className="box">
+              <span className="text">{peltier.title}</span>
+              <span
+                className={degreeBoxClasses(peltierStates, peltier)}
+              >{`${peltier.degrees} °C`}</span>
+              <CustomSwitch
+                onChange={(event) =>
+                  firstPeltierSwitch(peltier.name, event.target.checked)
+                }
               />
-              <span className="total">{`xxx: ${quantity} ml`}</span>
+            </div>
+          ))}
+        </div>
+        <div className="infos">
+          <span>Green = On temp</span>
+          <span>Red = Below target temp</span>
+          <span>Grey = Disabled</span>
+        </div>
+        <div className="temperature-list">
+          {temperatureList.map((temp) => (
+            <div key={temp.name} className="box">
+              <span className="text">{temp.title}</span>
+              <div
+                className={degreeBoxClasses(tempStates, temp)}
+              >{`${temp.degrees} °C`}</div>
+              <CustomSwitch
+                onChange={(event) =>
+                  temperatureSwitch(temp.name, event.target.checked)
+                }
+              />
             </div>
           ))}
         </div>

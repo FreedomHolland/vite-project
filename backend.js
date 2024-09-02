@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import { despensorCycle } from './src/functions/despensorCycle.js';
-import { checkForCanOrCup } from './src/functions/gpio_module.js';
+import { checkForCanOrCup, readTemperature } from './src/functions/gpio_module.js';
 
 const app = express();
 const port = 3003;
@@ -22,6 +22,23 @@ const handleGpioEvents = (log) => {
 
 // Start monitoring GPIO pins
 checkForCanOrCup(handleGpioEvents);
+
+// Function to periodically read temperature and send updates
+const startTemperatureMonitoring = () => {
+    setInterval(() => {
+        readTemperature((err, temperature) => {
+            if (err) {
+                console.error('Temperature monitoring error:', err);
+                return;
+            }
+            const tempLog = `[GPIO] Temperature: ${temperature}°C`;
+            handleGpioEvents(tempLog);
+        });
+    }, 10000); // Check temperature every 10 seconds
+};
+
+// Start monitoring temperature
+startTemperatureMonitoring();
 
 // Endpoint to get the server status
 app.get('/api/status', (req, res) => {
@@ -63,14 +80,15 @@ app.get('/api/check-can-or-cup', (req, res) => {
 
 // Endpoint to get the current temperature
 app.get('/api/temperature', (req, res) => {
-    try {
-        const temperature = readTemperature();
-        res.status(200).json({ temperature });
-    } catch (error) {
-        console.error('Error reading temperature:', error);
-        res.status(500).json({ message: 'Failed to read temperature', error: error.message });
-    }
+    readTemperature((err, temperature) => {
+        if (err) {
+            console.error('Error reading temperature:', err);
+            return res.status(500).json({ message: 'Failed to read temperature', error: err });
+        }
+        res.status(200).json({ temperature: `${temperature}°C` });
+    });
 });
+
 
 // Server-Sent Events (SSE) endpoint for real-time GPIO event streaming
 app.get('/api/gpio-events', (req, res) => {

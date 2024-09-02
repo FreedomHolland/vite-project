@@ -1,16 +1,24 @@
 .taste-selector-container {
-  height: 500px;
-  display: flex;
-  margin-top: 50px;
-  justify-content: center;
+  max-width: 800px;
+  max-height: 480px;
+  height: 100%;
+  display: grid;
   background-position: top;
   background-repeat: no-repeat;
-  background-image: url("/src/assets/img/taste-selector.png");
+  background-image: url("/src/assets/img/taste-selector.jpg");
+
+  .logs {
+    height: 80px;
+  }
+
+  .status,
+  .error {
+    width: fit-content;
+    height: fit-content;
+  }
 
   .buttons {
-    width: 800px;
     display: flex;
-    flex-wrap: wrap;
     align-items: center;
     justify-content: space-evenly;
 
@@ -21,6 +29,28 @@
       height: 200px;
       width: 200px;
       background-color: transparent;
+      border: none;
+      padding: 0;
+      outline: none;
+      transition: transform 0.1s ease, opacity 0.1s ease;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      &:active {
+        transform: scale(0.95);
+        opacity: 0.8;
+      }
     }
+  }
+
+  .configs-button {
+    padding: 16px;
+    height: fit-content;
+    align-self: flex-end;
+    justify-self: flex-end;
   }
 }

@@ -43,7 +43,7 @@ export default function BootStandBy() {
     <div className="boot-standby-container">
       <div className="container">
         <img src={simplie} />
-        <IconButton onClick={buttonClick}>
+        <IconButton className="icon" onClick={buttonClick}>
           <span className="material-symbols-outlined">settings</span>
         </IconButton>
       </div>
