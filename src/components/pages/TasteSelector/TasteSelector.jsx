@@ -67,7 +67,7 @@ export default function TasteSelector() {
 
         // here I have to use the var in taste_2
         if (data.log.includes("despensorCycle Taste_2")) {
-          navigate("/");
+          navigate("/feedback");
         }
       } catch (error) {
         setError("Error fetching GPIO log.");
@@ -98,10 +98,7 @@ export default function TasteSelector() {
         >
           <img src={strawberry} />
         </button>
-        <button
-          onClick={() => triggerdespensorCycle("Taste_2")}
-          className="lemon"
-        >
+        <button onClick={() => navigate("/feedback")} className="lemon">
           <img src={lemon} />
         </button>
         <button

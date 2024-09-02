@@ -1,14 +1,17 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Step1 } from "../../../assets/icons/Step1";
 import { log as logUtility } from "@utils/logUtility"; // Import the log function with a different name
-
+import { CircularProgress } from "@mui/material";
 import "./styles.scss";
 
 export default function Feedback() {
   const navigate = useNavigate();
   const [logMessage, setLogMessage] = useState("");
   const [error, setError] = useState(null);
+  const [progressMessage, setProgressMessage] = useState(
+    "Drink is being prepared"
+  );
+  const progress = 100;
 
   useEffect(() => {
     const fetchLog = async () => {
@@ -35,11 +38,38 @@ export default function Feedback() {
     return () => clearInterval(logInterval); // Clean up interval on unmount
   }, [navigate]);
 
+  useEffect(() => {
+    if (progress !== 100) {
+      setProgressMessage("Drink is being prepared");
+    }
+
+    if (progress === 100) {
+      setProgressMessage("Drink is ready");
+
+      const timer = setTimeout(() => {
+        setProgressMessage("Please pick up your drink");
+      }, 10000); // Change message after 10 seconds
+
+      return () => clearTimeout(timer); // Clean up timeout on unmount or progress change
+    }
+  }, [progress]);
+
   return (
     <div className="feedback-container">
-      <div className="div">
-        <Step1 className="circular" />
-        {/* Your SlimpieWordGemaakt component */}
+      <div className="container">
+        {progress === 100 ? (
+          <span id="check-icon" className="material-symbols-outlined">
+            check_circle
+          </span>
+        ) : (
+          <CircularProgress thickness={1} size={250} value={progress} />
+        )}
+        <div className="texts">
+          <span className="text">Status progress</span>
+          <span className="progress">{`${progress} to 100%`}</span>
+          <span className="text">End user: feedback</span>
+          <span className="message">{progressMessage}</span>
+        </div>
       </div>
     </div>
   );
