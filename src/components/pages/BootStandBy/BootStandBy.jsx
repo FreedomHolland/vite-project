@@ -4,8 +4,6 @@ import { log as logUtility } from "@utils/logUtility"; // Import the log functio
 import simplie from "./../../../assets/img/images-1.png";
 import { IconButton } from "@mui/material";
 import "./styles.scss";
-import { deactivateAllPumpsAndValve } from './despensorCycle.js';
-
 
 export default function BootStandBy() {
   const navigate = useNavigate();
@@ -13,7 +11,21 @@ export default function BootStandBy() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-  deactivateAllPumpsAndValve()
+    // Deactivate all pumps and valves on component load
+    const deactivatePumpsAndValves = async () => {
+      try {
+        const response = await fetch("http://localhost:3003/api/deactivate");
+        if (!response.ok) throw new Error("Failed to deactivate pumps and valves");
+        const data = await response.json();
+        logUtility(`Deactivation result: ${data.message}`); // Log the response
+      } catch (error) {
+        setError("Error deactivating pumps and valves.");
+        logUtility(`Error deactivating pumps and valves: ${error.message}`);
+      }
+    };
+
+    deactivatePumpsAndValves();
+
     const fetchLog = async () => {
       try {
         const response = await fetch("http://localhost:3003/api/logs");

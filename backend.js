@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import { despensorCycle } from './src/functions/despensorCycle.js';
 import { checkForCanOrCup, readTemperature } from './src/functions/gpio_module.js';
+import { deactivateAllPumpsAndValve } from './src/functions/despensorCycle.js';
 
 const app = express();
 const port = 3003;
@@ -22,6 +23,18 @@ const handleGpioEvents = (log) => {
 
 // Start monitoring GPIO pins
 checkForCanOrCup(handleGpioEvents);
+
+// // Endpoint to disable pumps and solenoid valve
+// app.post('/api/disable-pumps', (req, res) => {
+//     try {
+//         // Assuming deactivateAllPumpsAndValve() is a function to disable pumps
+//         deactivateAllPumpsAndValve();
+//         res.status(200).json({ message: 'Pumps and valve have been disabled successfully' });
+//     } catch (error) {
+//         console.error('Error disabling pumps and valve:', error);
+//         res.status(500).json({ message: 'Failed to disable pumps and valve', error: error.message });
+//     }
+// });
 
 // Function to periodically read temperature and send updates
 const startTemperatureMonitoring = () => {
@@ -66,6 +79,16 @@ app.post('/api/machine-process', (req, res) => {
         console.error('Error processing machine:', error);
         res.status(500).json({ error: 'Failed to process machine' });
     }
+});
+
+app.get('/api/deactivate', (req, res) => {
+  try {
+    deactivateAllPumpsAndValve();
+    res.status(200).json({ message: 'All pumps and valves have been deactivated.' });
+  } catch (error) {
+    console.error("Error deactivating pumps and valves:", error);
+    res.status(500).json({ message: 'Failed to deactivate pumps and valves.' });
+  }
 });
 
 // Endpoint to check for can/cup presence

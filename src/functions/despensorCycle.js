@@ -1,5 +1,4 @@
 import rpio from 'rpio';
-
 // Configurable Constants
 const TASTE1_PUMP_PIN = 37;           // Pin for Taste 1 Pump (GPIO 27)
 const TASTE2_PUMP_PIN = 35;           // Pin for Taste 2 Pump (GPIO 22)
@@ -95,7 +94,7 @@ export function despensorCycle(tasteInput) {
     }, TASTE_PUMP_DURATION);
 }
 
-function deactivateAllPumpsAndValve() {
+export function deactivateAllPumpsAndValve() {
     if (isPumpActive || isSolenoidActive) {
         console.log("Deactivating all pumps and solenoid valve.");
 
@@ -120,4 +119,4 @@ function deactivateAllPumpsAndValve() {
 }
 
 // Export deactivateAllPumpsAndValve to use elsewhere if needed
-export { deactivateAllPumpsAndValve };
+// export { deactivateAllPumpsAndValve };
