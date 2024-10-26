@@ -4,6 +4,8 @@ import { log as logUtility } from "@utils/logUtility"; // Import the log functio
 import simplie from "./../../../assets/img/images-1.png";
 import { IconButton } from "@mui/material";
 import "./styles.scss";
+import { deactivateAllPumpsAndValve } from './despensorCycle.js';
+
 
 export default function BootStandBy() {
   const navigate = useNavigate();
@@ -11,6 +13,7 @@ export default function BootStandBy() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+  deactivateAllPumpsAndValve()
     const fetchLog = async () => {
       try {
         const response = await fetch("http://localhost:3003/api/logs");

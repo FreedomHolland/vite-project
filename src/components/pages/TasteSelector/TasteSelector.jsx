@@ -22,6 +22,20 @@ export default function TasteSelector() {
     }
   };
 
+  const disablePumps = async () => {
+    try {
+      const response = await fetch("http://localhost:3003/api/disable-pumps", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
+      if (!response.ok) throw new Error("Failed to disable pumps");
+      logUtility("Pumps disabled due to no placement detected.");
+    } catch (error) {
+      setError(`Error disabling pumps: ${error.message}`);
+      logUtility(`Error disabling pumps: ${error.message}`);
+    }
+  };
+
   const triggerdespensorCycle = async (flavor) => {
     if (!hasCupOrCan) {
       setError("No cup or can detected. Please place a cup or can.");
@@ -60,12 +74,13 @@ export default function TasteSelector() {
         // Update cup or can status based on the latest log
         updateCupOrCanStatus(data.log);
 
-        // Navigate based on the log content
+        // Navigate and disable pumps based on log content
         if (data.log.includes("Nothing is placed")) {
+          disablePumps();
           navigate("/");
         }
 
-        // here I have to use the var in taste_2
+        // Additional navigation for specific taste
         if (data.log.includes("despensorCycle Taste_2")) {
           navigate("/feedback");
         }
@@ -92,20 +107,14 @@ export default function TasteSelector() {
         <div className="status">{logMessage}</div>
       </div>
       <div className="buttons">
-        <button
-          onClick={() => triggerdespensorCycle("Taste_1")}
-          className="strawberry"
-        >
-          <img src={strawberry} />
+        <button onClick={() => triggerdespensorCycle("Taste_1")} className="strawberry">
+          <img src={strawberry} alt="Strawberry Flavor" />
         </button>
-        <button onClick={() => navigate("/feedback")} className="lemon">
-          <img src={lemon} />
+        <button onClick={() => triggerdespensorCycle("Taste_2")} className="lemon">
+          <img src={lemon} alt="Lemon Flavor" />
         </button>
-        <button
-          onClick={() => triggerdespensorCycle("Taste_3")}
-          className="apple"
-        >
-          <img src={apple} />
+        <button onClick={() => triggerdespensorCycle("Taste_3")} className="apple">
+          <img src={apple} alt="Apple Flavor" />
         </button>
       </div>
       <IconButton className="configs-button" onClick={buttonClick}>

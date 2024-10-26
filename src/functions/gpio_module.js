@@ -1,5 +1,7 @@
 import { Gpio } from 'pigpio';
 import { sensors, temperature } from 'ds18b20';
+import { deactivateAllPumpsAndValve } from './despensorCycle.js';
+
 
 // GPIO Pin Setup
 const Can_Sensor = new Gpio(18, { mode: Gpio.INPUT }); // GPIO 18 (physical pin 12)

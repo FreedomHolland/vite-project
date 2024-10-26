@@ -14,4 +14,16 @@ body {
   * {
     line-height: 120%;
   }
+  body, button, a, input {
+  // cursor: none !important;
+}
+}
+
+// body, button, a, input {
+//   cursor: none !important;
+// }
+
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
 }

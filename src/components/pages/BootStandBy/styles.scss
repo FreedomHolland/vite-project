@@ -1,12 +1,26 @@
 .boot-standby-container {
   display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; // Full viewport height for centering the image
 
   .container {
-    display: grid;
+    position: relative; // Allows absolute positioning for the icon
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    img {
+      max-width: 90%; // Ensures the image is responsive
+      height: auto;
+    }
 
     .icon {
+      position: flex ;
+      bottom: 16px; // Distance from the bottom of the container
+      right: 16px; // Distance from the right side of the container
       padding: 16px;
-      justify-self: flex-end;
     }
   }
 }

@@ -25,13 +25,14 @@ checkForCanOrCup(handleGpioEvents);
 
 // Function to periodically read temperature and send updates
 const startTemperatureMonitoring = () => {
+    console.log("Start temp monitor")
     setInterval(() => {
         readTemperature((err, temperature) => {
             if (err) {
                 console.error('Temperature monitoring error:', err);
                 return;
             }
-            const tempLog = `[GPIO] Temperature: ${temperature}°C`;
+            const tempLog = `[Backend] Temperature: ${temperature}°C`;
             handleGpioEvents(tempLog);
         });
     }, 10000); // Check temperature every 10 seconds

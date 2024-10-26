@@ -1,8 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import CustomSwitch from "../../CustomSwitch/CustomSwitch";
 import "./styles.scss";
 
 export default function Configs() {
+  const navigate = useNavigate();
+
   const quantity = 100;
   const [mainWaterState, setMainWaterState] = useState(false);
   const [peltierStates, setPeltierStates] = useState({
@@ -16,6 +21,23 @@ export default function Configs() {
     TEMP_3: false,
   });
 
+  const [peltier1Temp, setPeltier1Temp] = useState(null); // State for Peltier #1 temperature
+
+  useEffect(() => {
+    // Fetch temperature from the backend API
+    const fetchTemperature = async () => {
+      try {
+        const response = await fetch("/api/temperature");
+        const data = await response.json();
+        setPeltier1Temp(data.temperature); // Assuming the API returns temperature in the 'temperature' field
+      } catch (error) {
+        console.error("Error fetching temperature:", error);
+      }
+    };
+
+    fetchTemperature();
+  }, []); // Fetch once when component mounts
+
   const tastes = [
     { title: "Taste 1", quantity: 50, name: "TASTE_1" },
     { title: "Taste 2", quantity: 800, name: "TASTE_2" },
@@ -23,7 +45,7 @@ export default function Configs() {
   ];
 
   const firstPeltier = [
-    { title: "Peltier #1", degrees: 50, name: "PELTIER_1", targetTemp: true },
+    { title: "Peltier #1", degrees: peltier1Temp || "no input", name: "PELTIER_1", targetTemp: true }, // Updated to display the fetched temperature
     { title: "Peltier #2", degrees: 800, name: "PELTIER_2", targetTemp: false },
     { title: "Peltier #3", degrees: 1000, name: "PELTIER_3", targetTemp: true },
   ];
@@ -40,7 +62,24 @@ export default function Configs() {
 
   const tasteSwitch = (name, value) => {
     console.log(name, value);
-  };
+  }
+  // Send a request to the backend to start the pump for the selected taste
+  fetch('/api/machine-process', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ taste: name }), // Send the name of the taste (Taste_1, Taste_2, etc.)
+  })
+  .then((response) => {
+    if (!response.ok) {
+      throw new Error('Failed to start the pump');
+    }
+    console.log(`Pump for ${name} ${value ? 'enabled' : 'disabled'}`);
+  })
+  .catch((error) => {
+    console.error('Error activating pump:', error);
+  });
 
   const firstPeltierSwitch = (name, value) => {
     setPeltierStates((prev) => ({
@@ -88,7 +127,7 @@ export default function Configs() {
                 <span className="text">{taste.title}</span>
                 <CustomSwitch
                   onChange={(event) =>
-                    tasteSwitch(taste.name, event.target.checked)
+                    tasteSwitch(taste.name, event.target.checked) 
                   }
                 />
                 <span className="total">{`xxx: ${taste.quantity} ml`}</span>
@@ -97,6 +136,7 @@ export default function Configs() {
           </div>
           <span className="enable">Enable Taste dispensers</span>
         </div>
+        <Button startIcon={<ArrowBackIcon />} color="error" variant="outlined" className='return-button' onClick={() => navigate("/")}>Return to main</Button>
       </div>
       <div className="left-side">
         <span className="title">Cooler tempertures per segment</span>
